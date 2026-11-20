@@ -27,28 +27,29 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v3.2.2
 
-      - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses || true
+      - name: Accept Android licenses
+        run: |
+          mkdir -p $ANDROID_HOME/licenses
+          echo -e "24333f8a63b6825ea9c5514f83c2829b004d1fee\n" > $ANDROID_HOME/licenses/android-sdk-license
+          echo -e "84831b9409646167bb1c061d9c0dc7f81ce3cec5\n" > $ANDROID_HOME/licenses/android-sdk-preview-license
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" || \
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       - name: Ensure Gradle Wrapper
         run: |
-          if [ ! -f gradlew ]; then
+          if [ ! -f ./gradlew ] || [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
             gradle wrapper --gradle-version 8.9
           fi
-          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
-            gradle wrapper --gradle-version 8.9
-          fi
-          chmod +x gradlew || true
+          chmod +x gradlew
 
       - name: Build Debug APK
-        run: |
-          if [ -x ./gradlew ]; then
-            ./gradlew assembleDebug --stacktrace --no-daemon
-          else
-            gradle assembleDebug --stacktrace --no-daemon
-          fi
+        run: ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
