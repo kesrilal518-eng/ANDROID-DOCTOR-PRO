@@ -169,7 +169,12 @@ fun ScanProgressBar(progress: Float, currentTest: String, isRunning: Boolean) {
 }
 
 @Composable
-fun NeonButton(text: String, onClick: () -> Unit, enabled: Boolean = true, modifier: Modifier = Modifier) {
+fun NeonButton(
+    text: String,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     androidx.compose.material3.Button(
         onClick = onClick,
         enabled = enabled,

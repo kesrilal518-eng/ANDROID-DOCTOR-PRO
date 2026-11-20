@@ -89,18 +89,18 @@ fun InteractiveTestsScreen(onBack: () -> Unit) {
         if (showDisplayTest) {
             Box(modifier = Modifier.fillMaxSize().background(displayColor).padding(padding)) {
                 Column(modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
-                    NeonButton("White") { displayColor = Color.White }
+                    NeonButton(text = "White", onClick = { displayColor = Color.White })
                     Spacer(Modifier.height(8.dp))
-                    NeonButton("Red") { displayColor = Color.Red }
+                    NeonButton(text = "Red", onClick = { displayColor = Color.Red })
                     Spacer(Modifier.height(8.dp))
-                    NeonButton("Green") { displayColor = Color.Green }
+                    NeonButton(text = "Green", onClick = { displayColor = Color.Green })
                     Spacer(Modifier.height(8.dp))
-                    NeonButton("Blue") { displayColor = Color.Blue }
+                    NeonButton(text = "Blue", onClick = { displayColor = Color.Blue })
                     Spacer(Modifier.height(8.dp))
-                    NeonButton("Black / Exit") {
+                    NeonButton(text = "Black / Exit", onClick = {
                         displayColor = Color.Black
                         showDisplayTest = false
-                    }
+                    })
                 }
             }
             return@Scaffold
@@ -122,11 +122,11 @@ fun InteractiveTestsScreen(onBack: () -> Unit) {
                         color = NeonGreen, fontSize = 16.sp
                     )
                     Spacer(Modifier.height(16.dp))
-                    NeonButton("Clear & Exit") {
+                    NeonButton(text = "Clear & Exit", onClick = {
                         touchPoints.clear()
                         showTouchOverlay = false
                         statusMessage = "Touch test finished. Review for dead zones visually."
-                    }
+                    })
                 }
             }
             return@Scaffold
@@ -147,7 +147,7 @@ fun InteractiveTestsScreen(onBack: () -> Unit) {
             )
             Spacer(Modifier.height(16.dp))
 
-            NeonButton("Request Runtime Permissions") {
+            NeonButton(text = "Request Runtime Permissions", onClick = {
                 permissionLauncher.launch(
                     arrayOf(
                         Manifest.permission.CAMERA,
@@ -157,20 +157,20 @@ fun InteractiveTestsScreen(onBack: () -> Unit) {
                         Manifest.permission.ACCESS_FINE_LOCATION
                     )
                 )
-            }
+            })
             Spacer(Modifier.height(10.dp))
-            NeonButton("Display Color Test") {
+            NeonButton(text = "Display Color Test", onClick = {
                 showDisplayTest = true
                 statusMessage = "Visually inspect for dead pixels, discoloration, or backlight issues."
-            }
+            })
             Spacer(Modifier.height(10.dp))
-            NeonButton("Touchscreen Test") {
+            NeonButton(text = "Touchscreen Test", onClick = {
                 touchPoints.clear()
                 showTouchOverlay = true
                 statusMessage = "Draw across the entire screen."
-            }
+            })
             Spacer(Modifier.height(10.dp))
-            NeonButton("Vibration Test") {
+            NeonButton(text = "Vibration Test", onClick = {
                 try {
                     val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         val vm = context.getSystemService(android.content.Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -193,15 +193,15 @@ fun InteractiveTestsScreen(onBack: () -> Unit) {
                 } catch (e: Exception) {
                     statusMessage = "Vibration error: ${e.message}"
                 }
-            }
+            })
             Spacer(Modifier.height(10.dp))
-            NeonButton("Microphone Quick Check") {
+            NeonButton(text = "Microphone Quick Check", onClick = {
                 val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
                 statusMessage = if (!granted) "RECORD_AUDIO permission required."
                 else "Microphone permission OK. For full test, record and playback."
-            }
+            })
             Spacer(Modifier.height(10.dp))
-            NeonButton("Camera Presence Check") {
+            NeonButton(text = "Camera Presence Check", onClick = {
                 val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 if (!granted) {
                     statusMessage = "CAMERA permission required."
@@ -213,7 +213,7 @@ fun InteractiveTestsScreen(onBack: () -> Unit) {
                 } catch (e: Exception) {
                     statusMessage = "Camera error: ${e.message}"
                 }
-            }
+            })
             Spacer(Modifier.height(24.dp))
             Text(
                 "These interactive tests require your observation. Software cannot fully certify hardware without user feedback and cannot detect internal IC faults.",
